@@ -7,6 +7,10 @@ using UnityEngine;
 public class PersistentData
 {
     private Dictionary<string, object> persistentHolder = new Dictionary<string, object>();
+    private Dictionary<string, bool> persistentBoolHolder = new Dictionary<string, bool>();
+    private Dictionary<string, int> persistentIntHolder = new Dictionary<string, int>();
+    private Dictionary<string, string> persistentStringHolder = new Dictionary<string, string>();
+    private Dictionary<string, float> persistentFloatHolder = new Dictionary<string, float>();
     private string filePath;
 
     /// <summary>
@@ -43,7 +47,11 @@ public class PersistentData
         if (stream.Length != 0)
         {
             PersistentData data = formatter.Deserialize(stream) as PersistentData;
-            persistentHolder = data.GetAll();
+            persistentHolder = data.GetAllObjects();
+            persistentFloatHolder = data.GetAllFloats();
+            persistentIntHolder = data.GetAllInts();
+            persistentBoolHolder = data.GetAllBooleans();
+            persistentStringHolder = data.GetAllStrings();
         }
         stream.Close();
     }
@@ -67,32 +75,198 @@ public class PersistentData
     }
 
     /// <summary>
-    /// Add a key or overwrrite a key if it already exists
+    /// Add a serializable object to the object pool
     /// </summary>
     /// <param name="key"></param>
     /// <param name="value"></param>
-    public void AddToPool(string key, object value)
+    public void AddObjectToPool(string key, object value)
     {
-        persistentHolder[key] = value;
+        persistentHolder.Add(key, value);
     }
 
     /// <summary>
-    /// Will return the value stored in the object if it exists null if it does not.
+    /// Add an int to the int pool
     /// </summary>
     /// <param name="key"></param>
+    /// <param name="value"></param>
+    public void AddIntToPool(string key, int value)
+    {
+        persistentIntHolder.Add(key, value);
+    }
+
+    /// <summary>
+    /// Add a string to the string pool
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    public void AddStringToPool(string key, string value)
+    {
+        persistentStringHolder.Add(key, value);
+    }
+
+    /// <summary>
+    /// Add a bool to the bool pool
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    public void AddBoolToPool(string key, bool value)
+    {
+        persistentBoolHolder.Add(key, value);
+    }
+
+    /// <summary>
+    /// Add a float to the float pool
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    public void AddFloatToPool(string key, float value)
+    {
+        persistentFloatHolder.Add(key, value);
+    }
+
+    /// <summary>
+    /// Get an object from the object pool or the default value if it does not exist
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="defaultValue"></param>
     /// <returns></returns>
-    public object GetFromPool(string key)
+    public object GetObjectFromPool(string key, object defaultValue = null)
     {
-        return persistentHolder[key];
+        return persistentHolder.GetValueOrDefault(key, defaultValue);
     }
 
     /// <summary>
-    /// Remove an entry from the pool
+    /// Get an int from the int pool or the default value if it does not exist
     /// </summary>
     /// <param name="key"></param>
-    public void RemoveAt(string key)
+    /// <param name="defaultValue"></param>
+    /// <returns></returns>
+    public int GetIntFromPool(string key, int defaultValue = 0)
     {
-        persistentHolder.Remove(key);
+        return persistentIntHolder.GetValueOrDefault(key, defaultValue);
+    }
+
+    /// <summary>
+    /// Get a string from the string pool or the default value if it does not exist
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="defaultValue"></param>
+    /// <returns></returns>
+    public string GetStringFromPool(string key, string defaultValue = null)
+    {
+        return persistentStringHolder.GetValueOrDefault(key, defaultValue);
+    }
+
+    /// <summary>
+    /// Get a bool from the bool pool or a default value if it does not exist
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="defaultValue"></param>
+    /// <returns></returns>
+    public bool GetBoolFromPool(string key, bool defaultValue = false)
+    {
+        return persistentBoolHolder.GetValueOrDefault(key, defaultValue);
+    }
+
+    /// <summary>
+    /// Get a float from the float pool or a default value if it does not exist
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="defaultValue"></param>
+    /// <returns></returns>
+    public float GetFloatFromPool(string key, float defaultValue = 0f)
+    {
+        return persistentFloatHolder.GetValueOrDefault(key, defaultValue);
+    }
+
+    /// <summary>
+    /// Remove an object from the object pool
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns>false if the object does not exsit</returns>
+    public bool RemoveObjectAt(string key)
+    {
+        try
+        {
+            persistentHolder.Remove(key);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Remove an int from the int pool
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns>false if the object does not exsit</returns>
+    public bool RemoveIntAt(string key)
+    {
+        try
+        {
+            persistentIntHolder.Remove(key);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Remove an string from the string pool
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns>false if the object does not exsit</returns>
+    public bool RemoveStringAt(string key)
+    {
+        try
+        {
+            persistentStringHolder.Remove(key);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Remove a bool from the bool pool
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns>false if the object does not exsit</returns>
+    public bool RemoveBoolAt(string key)
+    {
+        try
+        {
+            persistentBoolHolder.Remove(key);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Remove an float from the float pool
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns>false if the object does not exsit</returns>
+    public bool RemoveFloatAt(string key)
+    {
+        try
+        {
+            persistentIntHolder.Remove(key);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -118,21 +292,41 @@ public class PersistentData
         stream.Close();
     }
 
-    /// <summary>
-    /// Get everything stored
-    /// </summary>
-    /// <returns>Dictionary</returns>
-    public Dictionary<string, object> GetAll()
+    public Dictionary<string, object> GetAllObjects()
     {
         return persistentHolder;
     }
 
+    public Dictionary<string, int> GetAllInts()
+    {
+        return persistentIntHolder;
+    }
+
+    public Dictionary<string, float> GetAllFloats()
+    {
+        return persistentFloatHolder;
+    }
+
+    public Dictionary<string, bool> GetAllBooleans()
+    {
+        return persistentBoolHolder;
+    }
+
+    public Dictionary<string, string> GetAllStrings()
+    {
+        return persistentStringHolder;
+    }
+
     /// <summary>
-    /// Will delete everything inside the file
+    /// Will delete everything inside the file. The Save file itself will remain in the filepath.
     /// </summary>
     public void WipeSave()
     {
         persistentHolder = new Dictionary<string, object>();
+        persistentBoolHolder = new();
+        persistentFloatHolder = new();
+        persistentIntHolder = new();
+        persistentStringHolder = new();
         Save();
     }
 }
