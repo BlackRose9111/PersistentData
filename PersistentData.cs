@@ -81,7 +81,7 @@ public class PersistentData
     /// <param name="value"></param>
     public void AddObjectToPool(string key, object value)
     {
-        persistentHolder.Add(key, value);
+        persistentHolder[key] = value;
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class PersistentData
     /// <param name="value"></param>
     public void AddIntToPool(string key, int value)
     {
-        persistentIntHolder.Add(key, value);
+        persistentIntHolder[key] = value;
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public class PersistentData
     /// <param name="value"></param>
     public void AddStringToPool(string key, string value)
     {
-        persistentStringHolder.Add(key, value);
+        persistentStringHolder[key] = value;
     }
 
     /// <summary>
@@ -111,7 +111,7 @@ public class PersistentData
     /// <param name="value"></param>
     public void AddBoolToPool(string key, bool value)
     {
-        persistentBoolHolder.Add(key, value);
+        persistentBoolHolder[key] = value;
     }
 
     /// <summary>
@@ -121,7 +121,7 @@ public class PersistentData
     /// <param name="value"></param>
     public void AddFloatToPool(string key, float value)
     {
-        persistentFloatHolder.Add(key, value);
+        persistentFloatHolder[key] = value;
     }
 
     /// <summary>
